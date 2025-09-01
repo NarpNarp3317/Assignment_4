@@ -1,6 +1,9 @@
-﻿  AlchemyWrokShop.cpp
-  Assigment_4.cpp
-  RecipeManager.cpp
-  StockManager.cpp
+﻿  Assigment_4.cpp
+  SearchHelper.cpp
+C:\Users\PC_1M\Desktop\Assignment_3\Assigment_4\SearchHelper.cpp(99,52): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
+C:\Users\PC_1M\Desktop\Assignment_3\Assigment_4\SearchHelper.cpp(99,52): warning C4267:         with
+C:\Users\PC_1M\Desktop\Assignment_3\Assigment_4\SearchHelper.cpp(99,52): warning C4267:         [
+C:\Users\PC_1M\Desktop\Assignment_3\Assigment_4\SearchHelper.cpp(99,52): warning C4267:             _Ty=int
+C:\Users\PC_1M\Desktop\Assignment_3\Assigment_4\SearchHelper.cpp(99,52): warning C4267:         ]
   Generating Code...
   Assigment_4.vcxproj -> C:\Users\PC_1M\Desktop\Assignment_3\x64\Debug\Assigment_4.exe

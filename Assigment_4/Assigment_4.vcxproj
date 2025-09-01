@@ -126,16 +126,26 @@
     <ClCompile Include="AlchemyWrokShop.cpp" />
     <ClCompile Include="Assigment_4.cpp" />
     <ClCompile Include="Ingredientdetector.cpp" />
+    <ClCompile Include="ListPrinter.cpp" />
     <ClCompile Include="PotionBottle.cpp" />
     <ClCompile Include="RecipeManager.cpp" />
+    <ClCompile Include="search.cpp" />
+    <ClCompile Include="search.h" />
+    <ClCompile Include="SearchHelper.cpp" />
     <ClCompile Include="StockManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlchemyWrokShop.h" />
+    <ClInclude Include="Ask_and_Proceed.h" />
+    <ClInclude Include="Enum_Key_Value.h" />
     <ClInclude Include="IngredientDetector.h" />
+    <ClInclude Include="key_Function.h" />
+    <ClInclude Include="ListPrinter.h" />
     <ClInclude Include="PotionBottle.h" />
     <ClInclude Include="PotionRecipe.h" />
     <ClInclude Include="RecipeManager.h" />
+    <ClInclude Include="SearchHelper.h" />
+    <ClInclude Include="SearchResult.h" />
     <ClInclude Include="StockManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

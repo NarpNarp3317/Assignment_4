@@ -1,5 +1,6 @@
 #include "IngredientDetector.h"
 #include <iostream>
+#include "search.h"
 
 using namespace std;
 
@@ -350,4 +351,8 @@ bool IngredientDetector::DetectSignal(char current_char)
 {
 	if (current_char == _endl_signal || current_char == _count_signal) return true;
 	else return false;
+}
+
+IngredientDetector::~IngredientDetector()// good bye
+{
 }

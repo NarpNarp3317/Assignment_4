@@ -36,4 +36,6 @@ public:
 
 	bool DetectSignal(char current_char);
 
+	~IngredientDetector();
+
 };
