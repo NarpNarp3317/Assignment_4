@@ -5,14 +5,15 @@
 RecipeManager::RecipeManager()
 {
 	// default recipes
-	PotionRecipe Red_Potion("Red Potion", { {"salt",2},{"red pepper", 2}, {"tomato",5} }, "User health++", 3);
-	PotionRecipe Blue_Potion("Blue Potion", { {"wild berry",5},{"lemon", 1}, {"sugar",5} }, "User is faster for next 5 min", 3);
-	PotionRecipe Yellow_Potion("Yellow Potion", { {"chilly powder",2},{"lsd", 2}, {"meth",1} }, "Bell! \a", 3);
+	//PotionRecipe Red_Potion("Red Potion", { {"salt",2},{"red pepper", 2}, {"tomato",5} }, "User health++", 3);
+	//PotionRecipe Blue_Potion("Blue Potion", { {"wild berry",5},{"lemon", 1}, {"sugar",5} }, "User is faster for next 5 min", 3);
+	//PotionRecipe Yellow_Potion("Yellow Potion", { {"chilly powder",2},{"lsd", 2}, {"meth",1} }, "Bell! \a", 3);
 
 	_recipes =// adding default recipes
 	{
-		Red_Potion,Blue_Potion,Yellow_Potion
+		//Red_Potion,Blue_Potion,Yellow_Potion
 	};
+	// no default for now
 }
 
 
@@ -58,7 +59,7 @@ PotionRecipe RecipeManager::Find_Recipe_with_SameIngredients(map<string, int>ing
 	return  Nullrecipe ;//return nothing// couldnt find the way(could use pointer, but for now, this way)
 }
 
-vector<SearchResult> RecipeManager::SearchPotionRecipes(const vector<string> &keywords)
+vector<SearchResult> RecipeManager::SearchPotionRecipes(const vector<string> &keywords)// fuck. why did i made it in recipe manager, not in list printer... fuck
 {
 	vector<SearchResult> final_results = {};
 	SearchResult combined_result;

@@ -14,3 +14,4 @@ void AskAndProceed(string command, map<const char, Str_Key_function > commandkey
 bool AskYes_or_No(string question, vector<char> chars_for_Yes, vector<char> chars_for_No);
 
 
+//void Get_Full_line(istream& input, string& output);

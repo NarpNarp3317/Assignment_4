@@ -1,7 +1,7 @@
 #include "AlchemyWrokShop.h"
 #include "Ask_and_Proceed.h"
 
-using namespace std;
+//using namespace std;// using this and using windows.h cause problem.  i geuss it works when they are not in same cpp?
 
 AlchemyWorkShop::AlchemyWorkShop(string name)
 {
@@ -75,7 +75,7 @@ void AlchemyWorkShop::SetInputKeyMapping()
 	_comands_Map['5'] = { "Sell Potion",[this]() {this->TrytoSellPotion(); } };
 	_comands_Map['6'] = { "Add New Ingredient",[this]() {this->AddIngredients(); } };
 	_comands_Map['7'] = { "Leave "+ this->_name,[this]() {this->LeaveShop(); } };
-	_comands_Map['8'] = { "Cheat code" + this->_name,[this]() {this->KABOOM(); } };
+	_comands_Map['8'] = { "Cheat code", [this]() {this->KABOOM(); } };
 	
 
 }
@@ -108,9 +108,12 @@ bool AlchemyWorkShop::GetCommand()
 void AlchemyWorkShop::PrintAllStatus()//print all status
 {
 	PrintCoinStatus();
+	PrintoutBottleStatus();
 	PrintIngredientStatus();
 	PrintPotionStatus();	
 	PrintRecipeStatus();
+
+	EnterToContinue();// enter to continue
 }
 
 void AlchemyWorkShop::PrintPotionStatus()
@@ -141,6 +144,11 @@ void AlchemyWorkShop::PrintCoinStatus()
 	PrintColorString(to_string(_current_coins), 14);
 	//SetConsoleTextAttribute(_output_handle, 7);//default white
 	printf("\n");
+}
+
+void AlchemyWorkShop::PrintoutBottleStatus()
+{
+	cout << "Current Bottle: " << _empty_bottle_count << endl;
 }
 
 void AlchemyWorkShop::PrintColorString(string string, int color)
@@ -213,7 +221,7 @@ void AlchemyWorkShop::MakePotion()//--------------------------------------------
 
 		//cin >> written_list;// this cannot gets string with " "
 
-		std::cin.ignore(9999, '\n');
+		std::cin.ignore();
 		getline(cin, written_list);// iostream holds the prior string/char. to 
 		//cout << written_list;	
 		printf("\n");
@@ -240,7 +248,7 @@ void AlchemyWorkShop::MakePotion()//--------------------------------------------
 
 	if (lenght > 0)
 	{
-		cout << "New Item" << ((lenght > 1) ? "s are" : " is") << " detected." << endl;
+		cout << "New Ingredient" << ((lenght > 1) ? "s are" : " is") << " detected." << endl;
 
 		cout << new_ingredients[0];// print first 
 
@@ -262,24 +270,61 @@ void AlchemyWorkShop::MakePotion()//--------------------------------------------
 		{//yes
 			if (PaywithCoin(total_cost))
 			{
+				// make a map of new ingredients with default
+				int defualt_count=_Stock_M->GetMax_ingredientCounts();
+				map<string, int> converted_ingredients;
+
+				for (const string& name : new_ingredients)
+				{
+					converted_ingredients[name] = defualt_count;
+				}
+				//conversion completed
+
+				_Stock_M->AddIngredients(converted_ingredients);
+
+
 				cout << "New ingredients are added." << endl;
-				PrintCoinStatus();
+				//PrintCoinStatus();// pay with coin will update the coin status automatically
 				// print out the ingredient state;
-				_empty_bottle_count -= 1;//decrement used empty potion bottle // this is where it finalized!
+
+
+
+				//check if the ingredients are enough
+				if (_Stock_M->UseIngredients(sorted_ingredients))// put the first writen list of ingredients to use and deduct the used amount
+				{// this function returns bool
+					// if it used ingredients
+					_empty_bottle_count -= 1;//decrement used empty potion bottle // this is where it finalized!
+					//potion is created
+				}
+				else
+				{
+					cout << "Not enough ingredients are in the storage." << endl;
+
+					EnterToContinue();// enter to continue
+					return;// making potion failed. end function
+				}
+				
+				
+
 			}
 			else
 			{
 				cout << "Not enough coins to purchase new ingredients." << endl;
+
+				EnterToContinue();// enter to continue
 				return;// end make potion function
 			}
 		}
 		else
 		{//no
 			cout << "Potion making is cancled." << endl;
+
+			EnterToContinue();// enter to continue
 			return;// end make potion function
 		}
+
 	}
-	else
+	
 	// end of situation if new ingredients were/was found
 	
 
@@ -335,11 +380,12 @@ void AlchemyWorkShop::MakePotion()//--------------------------------------------
 		else// if selected yes!
 		{
 		*/ // no more using while
-
+			
 			while (!isprocessing)//-------------> type name
 			{
 				cout << "Type in name of new potion: ";
-				cin >> newPotionName;
+				cin.ignore();
+				getline(cin, newPotionName);
 
 				if (newPotionName.size() == 0)//if no name was typed in;
 				{
@@ -367,15 +413,17 @@ void AlchemyWorkShop::MakePotion()//--------------------------------------------
 
 			cout << "Type in potion effect : ";
 
-			cin.ignore(9999, '\n');
+			//cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');//---------------------------------------------sdfasad sfewsf 
+
+			
 			getline(cin, newPotionEffect);
-			printf("\n");
+			cout << endl;
 
 			cout << "Type in potion price : ";
 			cin >> newPotionPrice;
-			printf("\n");
+			cout << endl;
 
-			PotionRecipe newPotionRecipe(newPotionName, ingredients, newPotionEffect, newPotionPrice);// make new potion recipe
+			PotionRecipe newPotionRecipe(newPotionName, sorted_ingredients, newPotionEffect, newPotionPrice);// make new potion recipe
 			if (_Recipe_M->AddPotionRecipe(newPotionRecipe))
 			{
 				cout << newPotionName << " is added as new recipe." << endl;
@@ -407,7 +455,7 @@ void AlchemyWorkShop::MakePotion()//--------------------------------------------
 		//when player decides to discard the recipe, the "new" potion didnt get its name, effect, or price. all of these wont work. just throw it away as well.
 		
 	}
-	
+	EnterToContinue();// enter to continue
 }
 
  void AlchemyWorkShop::StartSearch()
@@ -416,12 +464,14 @@ void AlchemyWorkShop::MakePotion()//--------------------------------------------
 	 cout << "Type in keyword: ";
 	 string written_string;
 
-	 cin.ignore(999999, '\n');
+	 cin.ignore();
 	 getline(cin, written_string);
 
 	 if (written_string.empty())
 	 {
 		 cout << "No keyword detected." << endl;
+
+		 EnterToContinue();// enter to continue
 		 return;// end function
 	 }
 	 // convert string of keywords to seperate chunks of keyword
@@ -441,18 +491,21 @@ void AlchemyWorkShop::MakePotion()//--------------------------------------------
 	 }
 	 // vector ready to be used
 
-	// _ListPrinter->PrintOutSearchResults((_Recipe_M->SearchPotionRecipes(chunks_of_keyword)));
-	// printf("\n");
-	// _ListPrinter->PrintOutSearchResults((_Recipe_M->SearchPotionRecipes(chunks_of_keyword)));
-
-
-	 cin.get();
-
-
 	 // start search using keyword chunks
-	 //--------------------------------------- ** Search Potions ** (by name and by its recipe)
+	 // 
+	 //---------------------------------------------------------------------------------------------------------- ** Search Potions ** (by name and by its recipe)
+	 _ListPrinter->PrintOutSearchResults((_Recipe_M->SearchPotionRecipes(chunks_of_keyword)), vertical);
 
-	 //--------------------------------------- ** Search Ingredients **
+	 //---------------------------------------------------------------------------------------------------------- ** Search Ingredients **
+	 //_ListPrinter->PrintOutSearchResults((_Stock_M->(chunks_of_keyword)), vertical);
+
+
+	 EnterToContinue();// enter to continue
+
+
+	 
+
+	
 
 
 
@@ -657,13 +710,18 @@ void AlchemyWorkShop::MakePotion()//--------------------------------------------
 		 if (AskYes_or_No(question, {'Y', 'y'}, {'X','x'}))// ask question
 		 {// if Y
 			 cout << "Potion is sold to the customer." << endl;
+			 _empty_bottle_count += 1;// return the empty bottle
 			 EarnCoins(discount_price);
+
+			 EnterToContinue();// enter to continue
 			 return true;
 		 }
 		 else
 		 {// if N
 			 cout << "Potion is sold to the customer." << endl;// no discount!
 			 EarnCoins(potion_price);
+
+			 EnterToContinue();// enter to continue
 			 return true;
 		 }
 	 }
@@ -684,6 +742,12 @@ void AlchemyWorkShop::MakePotion()//--------------------------------------------
 
 	 cout << "Player couldn't use the potion." << endl;
 	 return false;// if it failed
+ }
+
+ void AlchemyWorkShop::EnterToContinue()
+ {
+	 PrintColorString(">> Enter to continue.", 8);
+	 cin.get();
  }
 
  void AlchemyWorkShop::LeaveShop()

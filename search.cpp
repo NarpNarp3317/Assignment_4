@@ -5,12 +5,13 @@ SearchResult StringChecker(const string& keyword, const string& compared_string)
 	SearchResult result = { "",{} };
 
 	if (keyword.length() == 0 || compared_string.length() == 0) return result;//if there are nothing, return nothing;
+	if (keyword.length() > compared_string.length() == 0) return result;// if keyword is bigger than comparing word
 
 	//for (int i = 0; i < compared_string.length() - keyword.length(); i++)//if lenght is not enough, why bother
 	for (int i = 0; i <= compared_string.length() - keyword.length(); i++)//abcabc, key=abc--> i=0;i<3 (nope) i=0;i<=3 (yep)
 	{
 		bool nobreak = true;
-		//int loopcount = 0;// to allow overlapping highlight, no skipping
+		int loopcount = 0;// to allow overlapping highlight, no skipping
 
 		for (int j = 0; j < keyword.length(); j++)
 		{
@@ -19,7 +20,7 @@ SearchResult StringChecker(const string& keyword, const string& compared_string)
 				nobreak = false;
 				break;
 			}
-			//++loopcount;//count the loop
+			++loopcount;//count the loop
 
 		//	ana anana
 		}// end of the loop // checking is done;
@@ -31,7 +32,7 @@ SearchResult StringChecker(const string& keyword, const string& compared_string)
 			result.indicator.push_back(i + keyword.length() - 1);//end index
 		}
 
-		//i += loopcount;// to skip the checked chars of compared_string 
+		i += loopcount;// to skip the checked chars of compared_string 
 		// this is preventing overlapping case. if it doesnt increment, then it will do unnecessary loop
 		// could detect the overlapping pattern and subtract the loopcount with size of pattern size
 		// or start keyword checking at the end of the pattern
@@ -41,7 +42,15 @@ SearchResult StringChecker(const string& keyword, const string& compared_string)
 
 	return result;
 }
-// version 2 (2dvector approach?)
+// version 2 (2dvector approach?)// this one does not work with overlapping hihglight case
+
+
+
+
+
+
+
+
 
 
 

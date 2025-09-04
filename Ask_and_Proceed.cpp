@@ -1,4 +1,5 @@
 #include "Ask_and_Proceed.h"
+#include <limits>// for cin.ignore(numeric_limits<streamsize>::max(), '\n'); which will ignore all the previous inputs
 #include <iostream>
 
 
@@ -9,7 +10,7 @@ void AskAndProceed(string command, map<const char, Str_Key_function > commandkey
 	while (true)
 	{
 		cout << command;
-		//cin.ignore(99999, '\n');
+		cin.ignore();
 		cin >> typedkey;
 
 		map<const char, Str_Key_function >::iterator it = commandkeys.find(typedkey);
@@ -34,7 +35,8 @@ bool AskYes_or_No(string question, vector<char> chars_for_Yes, vector<char> char
 	while (true)
 	{
 		cout << question;
-		//cin.ignore(99999, '\n');
+		//cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin.ignore();
 		cin >> typedkey;
 
 		if (find(chars_for_Yes.begin(), chars_for_Yes.end(), typedkey) != chars_for_Yes.end())// if typedkey is found in yes vector
@@ -51,3 +53,13 @@ bool AskYes_or_No(string question, vector<char> chars_for_Yes, vector<char> char
 		}
 	}
 }
+/*
+void Get_Full_line(istream& input, string& output)
+{
+	// Ignore any leftover characters in the input buffer where previous cin stream is stored
+	input.ignore(numeric_limits<streamsize>::max(), '\n');
+
+	// fuck yeah!
+	getline(input, output);
+}
+*/

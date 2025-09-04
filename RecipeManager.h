@@ -27,7 +27,7 @@ public:
 	
 	PotionRecipe Find_Recipe_with_SameIngredients(map<string, int>ingredients);
 
-	vector<SearchResult> SearchPotionRecipes(const vector<string>& keywords);
+	vector<SearchResult> SearchPotionRecipes(const vector<string>& keywords);//convert into one line of string and store it into search result 
 	string ConvertIntoOneString(PotionRecipe recipe);
 
 	vector<string> ConvertForStatus();

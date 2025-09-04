@@ -36,7 +36,6 @@ bool StockManager::AddNewPotion(string newPotionName)
 	return false;
 }
 
-
 void StockManager::SetCurrentCapacity(int current_count)
 {
 	_currentCapacity = current_count;
@@ -45,6 +44,11 @@ void StockManager::SetCurrentCapacity(int current_count)
 int StockManager::GetCurrentCapacity()
 {
 	return _currentCapacity;
+}
+
+int StockManager::GetMax_ingredientCounts()
+{
+	return _max_ingredientCounts;
 }
 
 map<string, int> StockManager::GetPotionStorage()
@@ -56,8 +60,6 @@ map<string, int> StockManager::GetIngredientStorage()
 {
 	return _ingredientStorage;
 }
-
-
 
 bool StockManager::CheckStorage()
 {
@@ -82,7 +84,49 @@ vector<string> StockManager::DetectNewIngredients(const map<string, int>& ingred
 	return detected_ingredients;
 }
 
-void StockManager::AddIngredients()
+void StockManager::AddIngredients(const map<string, int>& added_ingredients)
+{
+	for (const pair<string, int>& pair : added_ingredients)
+	{
+		_ingredientStorage[pair.first] = pair.second;
+	}//done!
+}
+
+bool StockManager::UseIngredients(const map<string, int>& used_Ingredients)// deduet the amount(value) of used ingredient(key)
+{
+	// check if ingredients are enough// if not, deduct nothing and return false
+	for (map<string,int>::const_iterator UsedIng_it= used_Ingredients.begin(); UsedIng_it != used_Ingredients.end() ; UsedIng_it++)
+	{
+		string name = UsedIng_it->first;
+		int use_amount = UsedIng_it->second;
+
+		map<string, int> temp_save = used_Ingredients;// temp save// if the condition is false, reset to original and reverse the deduction
+
+		map<string, int>::iterator Storate_it = _ingredientStorage.find(name);
+
+		if (_ingredientStorage.end() != Storate_it)// same name found
+		{
+			if (Storate_it->second >= use_amount)// if there is enough ingredient in storage
+			{
+				Storate_it->second -= use_amount;// deduct the used amount
+			}
+			else// same name but not enough ingredient to be used
+			{
+				_ingredientStorage = temp_save;
+				return false;
+			}
+		}
+		else
+		{// no no case
+			_ingredientStorage = temp_save;//reset
+			return false;
+		}
+	}
+	//after it finished the loop without returning false
+	return true;// ingredient deduction completed
+}
+
+void StockManager::Type_and_AddIngredients()
 {
 	IngredientDetector string_manager;// use the ingredient detector for string management
 	string writenstring="";
@@ -118,7 +162,6 @@ void StockManager::AddIngredients()
 		}// end of the loop
 	}
 }
-
 
 bool StockManager::RemovePotion(const string& removedPotion_name)
 // if this potion is used, if it return true, print out the wanted script, but if it return false, print out the reason why it failed in this function
@@ -189,6 +232,7 @@ map<string, int> StockManager::PutIngredientsOnBasket(map<string, int> shoppingl
 			pair.first;
 		}
 		*/
+
 		/*
 		map<string, int> ::iterator list_it = shoppinglist.begin();
 		while (list_it != shoppinglist.end())// List_it++ inside the loop till before it meets the end
@@ -260,22 +304,6 @@ void StockManager::RefillIngredients()
 		pair_pointer->second = _max_ingredientCounts;// set every value 
 	}
 }
-
-/*
-void StockManager::PrintoutStatus()
-{
-	
-	
-}
-
-void StockManager::PrintoutIngredientStatus()
-{
-}
-
-void StockManager::PrintoutPotionStatus()
-{
-}
-*/
 // print out is for printer obj
 
 StockManager::~StockManager()// burn it all

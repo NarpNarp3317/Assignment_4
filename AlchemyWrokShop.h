@@ -66,6 +66,7 @@ public:
 	void PrintIngredientStatus();
 	void PrintRecipeStatus();
 	void PrintCoinStatus();//Print out how much money does shop has now.
+	void PrintoutBottleStatus();
 
 	void PrintColorString(string string, int color);
 
@@ -104,6 +105,7 @@ public:
 	//--> i get it but turns outm name for user is not needed for now.
 
 
+	void EnterToContinue();
 
 
 	void LeaveShop();

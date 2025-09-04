@@ -218,6 +218,7 @@ void ListPrinter::PrintOutSearchResults(const vector<SearchResult>& results, Enu
 	}// end of printing all of the result, the real end!!! fuck yeah
 }
 
+
 ListPrinter::~ListPrinter()// good bye
 {
 }

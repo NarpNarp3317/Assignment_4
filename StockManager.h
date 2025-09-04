@@ -32,6 +32,7 @@ public:
 
 	void SetCurrentCapacity(int current_count);
 	int GetCurrentCapacity(); // may be this is for printing out status//nope
+	int GetMax_ingredientCounts();
 
 	//void SetPotionStorage(map<string, int> updated_storage);// set wont be necessary
 															// modify potion and ingrdient storage ONLY with remove, store or reset fucntion
@@ -47,7 +48,10 @@ public:
 
 
 	vector<string> DetectNewIngredients(const map<string, int>& ingredients);
-	void AddIngredients();
+
+	void AddIngredients(const map<string,int>& added_ingredients);
+	bool UseIngredients(const map<string, int>& used_Ingredients);
+	void Type_and_AddIngredients();
 
 	bool RemovePotion(const string& removedPotion_name);// removing potion can be done in many situations. to printout the situation, use bool return of this function
 	bool StorePotion(const string& newPotion_name);// add new potion in potion storage;// returns bool for the same reason why remove potion does it too
